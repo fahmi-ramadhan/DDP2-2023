@@ -68,15 +68,20 @@ public class NotaGenerator {
                     String beratCucian = input.nextLine().trim();
                     if (beratCucian.matches("\\d+")) {
                         berat = Integer.parseInt(beratCucian);
-                        break;
+                        if (berat == 1) {  // Jika berat cucian kurang dari 2k kg (1 kg), maka akan dianggap sebagai 2 kg
+                            System.out.println("Cucian kurang dari 2 kg, maka cucian akan dianggap sebagai 2 kg");
+                            berat = 2;
+                            break;
+                        } else if (berat == 0) {  // Jika berat cucian adalah 0 kg, maka kembali ke awal loop
+                            System.out.println("Berat harus berupa bilangan bulat positif");
+                            continue;
+                        } else {
+                            break;
+                        }
                     }
                     else System.out.println("Berat harus berupa bilangan bulat positif");
                 }
-                // Jika berat cucian kurang dari 2k kg, maka akan dianggap sebagai 2 kg
-                if (berat < 2) {
-                    berat = 2;
-                    System.out.println("Cucian kurang dari 2 kg, maka cucian akan dianggap sebagai 2 kg Nota Laundry");
-                }
+                
                 // Membuat nota dan mencetaknya
                 System.out.println("Nota Laundry");
                 System.out.println(generateNota(id, paket, berat, tanggalTerima));
