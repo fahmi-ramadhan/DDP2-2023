@@ -51,7 +51,7 @@ public class MainMenu {
         String memberId = generateId(nama, nomorHP);
         for (Member member : memberList) {
             if (member.getId().equals(memberId)) {
-                System.out.printf("Member dengan nama %s dan nomor hp %s sudah ada!\n", member.getNama(), nomorHP);
+                System.out.printf("Member dengan nama %s dan nomor hp %s sudah ada!\n", nama, nomorHP);
                 shouldGenerateUser = false;
                 break;
             }
