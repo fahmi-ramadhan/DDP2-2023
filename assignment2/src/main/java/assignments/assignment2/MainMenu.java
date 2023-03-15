@@ -170,7 +170,7 @@ public class MainMenu {
         }
         // Jika nota tidak ditemukan
         if (!notaHasFound) {
-            System.out.printf("Nota dengan id %s tidak ditemukan!\n", idNota);
+            System.out.printf("Nota dengan ID %s tidak ditemukan!\n", idNota);
         }
     }
 
