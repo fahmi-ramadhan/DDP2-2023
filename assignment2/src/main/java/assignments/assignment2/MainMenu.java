@@ -37,11 +37,11 @@ public class MainMenu {
     private static void handleGenerateUser() {
         // Meminta input nama dan nomor HP
         System.out.println("Masukkan nama Anda:");
-        String nama = input.nextLine().trim();
+        String nama = input.nextLine();
         System.out.println("Masukkan nomor handphone Anda:");
         String nomorHP;
         while (true) {
-            nomorHP = input.nextLine().trim();
+            nomorHP = input.nextLine();
             if (nomorHP.matches("\\d+")) break;
             else System.out.println("Field nomor hp hanya menerima digit.");
         }
@@ -68,7 +68,7 @@ public class MainMenu {
         // Mencari member berdasarkan id yang diinput
         System.out.println("Masukkan ID member:");
         Member member = null;
-        String id = input.nextLine().trim();
+        String id = input.nextLine();
         for (Member memberx : memberList) {
             if (memberx.getId().equals(id)) {
                 member = memberx;
@@ -80,7 +80,7 @@ public class MainMenu {
             while (true) {
                 // Meminta input paket laundry
                 System.out.println("Masukkan paket laundry:");
-                paket = input.nextLine().trim();
+                paket = input.nextLine();
                 if (paket.equals("?")) {
                     showPaket();  // Menampilkan paket yang tersedia
                 } else if (!paket.equalsIgnoreCase("express") &&
@@ -97,7 +97,7 @@ public class MainMenu {
             while (true) {
                 // Meminta input berat cucian
                 System.out.println("Masukkan berat cucian Anda [Kg]:");
-                String beratCucian = input.nextLine().trim();
+                String beratCucian = input.nextLine();
                 if (beratCucian.matches("\\d+")) {
                     berat = Integer.parseInt(beratCucian);
                     if (berat == 1) {  // Jika berat cucian kurang dari 2k kg (1 kg), maka akan dianggap sebagai 2 kg
@@ -149,7 +149,7 @@ public class MainMenu {
         System.out.println("Masukkan ID nota yang akan diambil:");
         String idNota;
         while (true) {
-            idNota = input.nextLine().trim();
+            idNota = input.nextLine();
             if (idNota.matches("\\d+")) break;
             else System.out.println("ID nota berbentuk angka!");
         }
