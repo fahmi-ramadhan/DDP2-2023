@@ -19,7 +19,7 @@ public class LoginManager {
      * Method mapping dari ke SystemCLI yang sesuai.
      *
      * @param id -> ID dari user yang akan menggunakan SystemCLI
-     * @return SystemCLI object yang sesuai dengan ID, null if  ID tidak ditemukan.
+     * @return SystemCLI object yang sesuai dengan ID, null if ID tidak ditemukan.
      */
     public SystemCLI getSystem(String id){
         if(memberSystem.isMemberExist(id)){
@@ -40,7 +40,12 @@ public class LoginManager {
      * @return Member object yang berhasil mendaftar, return null jika gagal mendaftar.
      */
     public Member register(String nama, String noHp, String password) {
-        // TODO
+        String id = NotaGenerator.generateId(nama, noHp);
+        if (!memberSystem.isMemberExist(id)) {
+            Member member = new Member(nama, id, password);
+            memberSystem.addMember(member);
+            return member;
+        }
         return null;
     }
 }
