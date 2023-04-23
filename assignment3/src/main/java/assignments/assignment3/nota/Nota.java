@@ -1,48 +1,107 @@
 package assignments.assignment3.nota;
+import assignments.assignment3.nota.service.CuciService;
 import assignments.assignment3.nota.service.LaundryService;
 import assignments.assignment3.user.Member;
+import static assignments.assignment3.nota.NotaManager.*;
+
+import java.util.Calendar;
+
 public class Nota {
     private Member member;
     private String paket;
     private LaundryService[] services;
     private long baseHarga;
     private int sisaHariPengerjaan;
-    private  int berat;
+    private int berat;
     private int id;
     private String tanggalMasuk;
     private boolean isDone;
     static public int totalNota;
 
     public Nota(Member member, int berat, String paket, String tanggal) {
-        //TODO
+        this.member = member;
+        this.berat = berat;
+        this.paket = paket;
+        this.tanggalMasuk = tanggal;
+        this.isDone = false;
+        this.services = new LaundryService[]{new CuciService()};
+        this.id = totalNota;
+        totalNota++;
+        // Menentukan sisa hari pengerjaan berdasarkan paket yang dipilih
+        if (this.paket.toLowerCase().equals("express")) {
+            this.sisaHariPengerjaan = 1;
+            this.baseHarga = 12000;
+        } else if (this.paket.toLowerCase().equals("fast")) {
+            this.sisaHariPengerjaan = 2;
+            this.baseHarga = 10000;
+        } else if (this.paket.toLowerCase().equals("reguler")) {
+            this.sisaHariPengerjaan = 3;
+            this.baseHarga = 7000;
+        }
     }
 
     public void addService(LaundryService service){
-        //TODO
+        LaundryService[] newServices = new LaundryService[services.length + 1];
+        for (int i = 0; i < services.length; i++) {
+            newServices[i] = services[i];
+        }
+        newServices[newServices.length - 1] = service;
+        services = newServices;
     }
 
     public String kerjakan(){
-        // TODO
-        return "";
+        for (int i = 0; i < services.length; i++) {
+            if (!services[i].isDone()) {
+                if (i == services.length - 1) this.isDone = true;
+                return services[i].doWork();
+            }
+        }
+        return "Sudah Selesai.";
     }
     public void toNextDay() {
-        // TODO
+        this.sisaHariPengerjaan--;
     }
 
     public long calculateHarga(){
-        // TODO
-        return -1;
+        long harga = this.berat * this.baseHarga;
+        for (LaundryService service : services) {
+            harga += service.getHarga(this.berat);
+        }
+        if (this.sisaHariPengerjaan < 0) {
+            harga += this.sisaHariPengerjaan * 2000;
+        }
+        return harga;
     }
 
     public String getNotaStatus(){
-        // TODO
-        return "";
+        if (this.isDone) return "Sudah selesai.";
+        else return "Belum selesai.";
     }
 
     @Override
     public String toString(){
-        // TODO
-        return "";
+        cal.add(Calendar.DATE, sisaHariPengerjaan);
+        String detailNota = String.format(
+                "[ID Nota = %d]\n" +
+                "ID    : %s\n" +
+                "Paket : %s\n" +
+                "Harga :\n" +
+                "%d kg x %d = %d\n" +
+                "tanggal terima  : %s\n" +
+                "tanggal selesai : %s\n" +
+                "--- SERVICE LIST ---\n",
+                this.id, this.member.getId(), this.paket, this.berat, this.baseHarga,
+                this.berat * this.baseHarga, this.tanggalMasuk, fmt.format(cal.getTime())
+            );
+        cal.add(Calendar.DATE, -sisaHariPengerjaan);
+        for (LaundryService service : services) {
+            detailNota += String.format("-%s @ Rp.%d\n", service.getServiceName(), service.getHarga(berat));
+        }
+        detailNota += String.format("Harga Akhir: %d", this.calculateHarga());
+        if (sisaHariPengerjaan < 0) {
+            detailNota += String.format(" Ada kompensasi keterlambatan %d * %d hari", -sisaHariPengerjaan, 2000);
+        }
+        return detailNota + "\n";
     }
 
     // Dibawah ini adalah getter
