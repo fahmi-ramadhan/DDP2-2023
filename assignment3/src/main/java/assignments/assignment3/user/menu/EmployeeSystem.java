@@ -1,6 +1,5 @@
 package assignments.assignment3.user.menu;
 
-import assignments.assignment3.nota.Nota;
 import assignments.assignment3.user.Employee;
 import assignments.assignment3.user.Member;
 
@@ -29,7 +28,11 @@ public class EmployeeSystem extends SystemCLI {
     @Override
     protected boolean processChoice(int choice) {
         boolean logout = false;
-        // TODO:
+        switch (choice) {
+            case 1 -> nyuci();
+            case 2 -> displayNota();
+            case 3 -> logout = true;
+        }
         return logout;
     }
 
@@ -41,5 +44,18 @@ public class EmployeeSystem extends SystemCLI {
         System.out.println("1. It's nyuci time");
         System.out.println("2. Display List Nota");
         System.out.println("3. Logout");
+    }
+
+    public void nyuci() {
+        System.out.printf("Stand back! %s beginning to nyuci!\n", loginMember.getNama());
+        for (int i = 0; i < notaList.length; i++) {
+            System.out.printf("Nota %d : %s\n", i, notaList[i].kerjakan());
+        }
+    }
+
+    public void displayNota() {
+        for (int i = 0; i < notaList.length; i++) {
+            System.out.printf("Nota %d : %s\n", i, notaList[i].getNotaStatus());
+        }
     }
 }
