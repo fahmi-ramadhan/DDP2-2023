@@ -1,5 +1,6 @@
 package assignments.assignment3.user.menu;
 
+import assignments.assignment3.nota.Nota;
 import assignments.assignment3.user.Employee;
 import assignments.assignment3.user.Member;
 
@@ -48,14 +49,16 @@ public class EmployeeSystem extends SystemCLI {
 
     public void nyuci() {
         System.out.printf("Stand back! %s beginning to nyuci!\n", loginMember.getNama());
-        for (int i = 0; i < notaList.length; i++) {
-            System.out.printf("Nota %d : %s\n", i, notaList[i].kerjakan());
+        for (Nota nota : notaList) {
+            System.out.println(nota.kerjakan());
         }
+        System.out.println();
     }
 
     public void displayNota() {
-        for (int i = 0; i < notaList.length; i++) {
-            System.out.printf("Nota %d : %s\n", i, notaList[i].getNotaStatus());
+        for (Nota nota : notaList) {
+            System.out.println(nota.getNotaStatus());
         }
+        System.out.println();
     }
 }
