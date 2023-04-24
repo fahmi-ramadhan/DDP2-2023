@@ -16,6 +16,7 @@ public class Nota {
     private int id;
     private String tanggalMasuk;
     private boolean isDone;
+    private boolean isDoneOnTime;
     static public int totalNota;
 
     public Nota(Member member, int berat, String paket, String tanggal) {
@@ -23,7 +24,6 @@ public class Nota {
         this.berat = berat;
         this.paket = paket;
         this.tanggalMasuk = tanggal;
-        this.isDone = false;
         this.services = new LaundryService[]{new CuciService()};
         this.id = totalNota;
         totalNota++;
@@ -52,11 +52,16 @@ public class Nota {
     public String kerjakan(){
         for (int i = 0; i < services.length; i++) {
             if (!services[i].isDone()) {
-                if (i == services.length - 1) this.isDone = true;
-                return services[i].doWork();
+                if (i == services.length - 1) {
+                    this.isDone = true;
+                    if (this.sisaHariPengerjaan >= 0) {
+                        this.isDoneOnTime = true;
+                    }
+                };
+                return String.format("Nota %d : ", this.id) + services[i].doWork();
             }
         }
-        return "Sudah Selesai.";
+        return String.format("Nota %d : Sudah selesai.", this.id);
     }
     public void toNextDay() {
         this.sisaHariPengerjaan--;
@@ -67,15 +72,16 @@ public class Nota {
         for (LaundryService service : services) {
             harga += service.getHarga(this.berat);
         }
-        if (this.sisaHariPengerjaan < 0) {
+        if (this.sisaHariPengerjaan < 0 && !isDoneOnTime) {
             harga += this.sisaHariPengerjaan * 2000;
         }
+        if (harga < 0) harga = 0;
         return harga;
     }
 
     public String getNotaStatus(){
-        if (this.isDone) return "Sudah selesai.";
-        else return "Belum selesai.";
+        if (this.isDone) return String.format("Nota %d : Sudah selesai.", this.id);
+        else return String.format("Nota %d : Belum selesai.", this.id);
     }
 
     @Override
@@ -98,7 +104,7 @@ public class Nota {
             detailNota += String.format("-%s @ Rp.%d\n", service.getServiceName(), service.getHarga(berat));
         }
         detailNota += String.format("Harga Akhir: %d", this.calculateHarga());
-        if (sisaHariPengerjaan < 0) {
+        if (sisaHariPengerjaan < 0 && !isDoneOnTime) {
             detailNota += String.format(" Ada kompensasi keterlambatan %d * %d hari", -sisaHariPengerjaan, 2000);
         }
         return detailNota + "\n";
