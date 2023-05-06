@@ -15,10 +15,19 @@ public class Nota {
     private int berat;
     private int id;
     private String tanggalMasuk;
+    private String tanggalSelesai;
     private boolean isDone;
     private boolean isDoneOnTime;
     static public int totalNota;
 
+    /**
+     * Constructor untuk membuat objek nota.
+     * 
+     * @param member
+     * @param berat
+     * @param paket
+     * @param tanggal
+     */
     public Nota(Member member, int berat, String paket, String tanggal) {
         this.member = member;
         this.berat = berat;
@@ -27,7 +36,7 @@ public class Nota {
         this.services = new LaundryService[]{new CuciService()};
         this.id = totalNota;
         totalNota++;
-        // Menentukan sisa hari pengerjaan berdasarkan paket yang dipilih
+        // Menentukan sisa hari pengerjaan berdasarkan paket yang dipilih.
         if (this.paket.toLowerCase().equals("express")) {
             this.sisaHariPengerjaan = 1;
             this.baseHarga = 12000;
@@ -38,8 +47,23 @@ public class Nota {
             this.sisaHariPengerjaan = 3;
             this.baseHarga = 7000;
         }
+        // Menentukan tanggal selesai (Note: if block digunakan agar employeeSystemRunningTest berhasil).
+        if (!this.tanggalMasuk.equals("")) {
+            Calendar newCal = Calendar.getInstance();
+            int year = Integer.parseInt(this.tanggalMasuk.substring(6));
+            int month = Integer.parseInt(this.tanggalMasuk.substring(3, 5)) - 1;
+            int date = Integer.parseInt(this.tanggalMasuk.substring(0, 2));
+            newCal.set(year, month, date);
+            newCal.add(Calendar.DATE, this.sisaHariPengerjaan);
+            this.tanggalSelesai = fmt.format(newCal.getTime());
+        }
     }
 
+    /**
+     * Method untuk menambahkan service ke array services.
+     * 
+     * @param service
+     */
     public void addService(LaundryService service){
         LaundryService[] newServices = new LaundryService[services.length + 1];
         for (int i = 0; i < services.length; i++) {
@@ -49,6 +73,11 @@ public class Nota {
         services = newServices;
     }
 
+    /**
+     * Method untuk mengerjakan service dan menentukan apakah selesai tepat waktu atau tidak.
+     * 
+     * @return String status pengerjaan service.
+     */
     public String kerjakan(){
         for (int i = 0; i < services.length; i++) {
             if (!services[i].isDone()) {
@@ -63,10 +92,20 @@ public class Nota {
         }
         return String.format("Nota %d : Sudah selesai.", this.id);
     }
+
+    /**
+     * Method untuk pergi ke hari selanjutnya (mengurangi sisa hari pengerjaan).
+     */
     public void toNextDay() {
         this.sisaHariPengerjaan--;
     }
 
+    /**
+     * Method untuk menghitung harga semua service yang dilakukan.
+     * Jika terlambat, mendapatkan kompensasi sebesar 2000 * jumlah hari keterlambatan.
+     * 
+     * @return harga semua service yang dilakukan.
+     */
     public long calculateHarga(){
         long harga = this.berat * this.baseHarga;
         for (LaundryService service : services) {
@@ -79,14 +118,21 @@ public class Nota {
         return harga;
     }
 
+    /**
+     * Method untuk menentukan status nota apakah sudah selesai atau belum.
+     * 
+     * @return String status nota.
+     */
     public String getNotaStatus(){
         if (this.isDone) return String.format("Nota %d : Sudah selesai.", this.id);
         else return String.format("Nota %d : Belum selesai.", this.id);
     }
 
+    /**
+     * Override method untuk mencetak detail nota.
+     */
     @Override
     public String toString(){
-        cal.add(Calendar.DATE, sisaHariPengerjaan);
         String detailNota = String.format(
                 "[ID Nota = %d]\n" +
                 "ID    : %s\n" +
@@ -97,9 +143,8 @@ public class Nota {
                 "tanggal selesai : %s\n" +
                 "--- SERVICE LIST ---\n",
                 this.id, this.member.getId(), this.paket, this.berat, this.baseHarga,
-                this.berat * this.baseHarga, this.tanggalMasuk, fmt.format(cal.getTime())
+                this.berat * this.baseHarga, this.tanggalMasuk, this.tanggalSelesai
             );
-        cal.add(Calendar.DATE, -sisaHariPengerjaan);
         for (LaundryService service : services) {
             detailNota += String.format("-%s @ Rp.%d\n", service.getServiceName(), service.getHarga(berat));
         }
