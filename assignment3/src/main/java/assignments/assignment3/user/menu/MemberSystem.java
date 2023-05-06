@@ -49,7 +49,11 @@ public class MemberSystem extends SystemCLI {
         memberList = newMemberList;
     }
 
+    /**
+     * Method untuk membuat nota.
+     */
     public void generateNota() {
+        // Meminta input paket laundry.
         System.out.println("Masukan paket laundry:");
         System.out.println("+-------------Paket-------------+");
         System.out.println("| Express | 1 Hari | 12000 / Kg |");
@@ -57,12 +61,16 @@ public class MemberSystem extends SystemCLI {
         System.out.println("| Reguler | 3 Hari |  7000 / Kg |");
         System.out.println("+-------------------------------+");
         String paket = in.nextLine();
+
+        // Meminta dan validasi input berat cucian.
         System.out.println("Masukan berat cucian anda [Kg]:");
         int berat = Integer.parseInt(in.nextLine());
         if (berat < 2) {
             berat = 2;
             System.out.println("Cucian kurang dari 2 kg, maka cucian akan dianggap sebagai 2 kg");
         }
+
+        // Meminta input untuk service tambahan.
         System.out.println("Apakah kamu ingin cucianmu disetrika oleh staff professional kami?");
         System.out.println("Hanya tambah 1000 / kg :0");
         System.out.print("[Ketik x untuk tidak mau]: ");
@@ -72,14 +80,18 @@ public class MemberSystem extends SystemCLI {
         System.out.print("[Ketik x untuk tidak mau]: ");
         boolean diantar = !in.nextLine().equals("x");
 
+        // Membuat nota dan menambahkannya ke notaList pada NotaManager dan instance loginMember.
         Nota nota = new Nota(loginMember, berat, paket, fmt.format(cal.getTime()));
         if (disetrika) nota.addService(new SetrikaService());
         if (diantar) nota.addService(new AntarService());
         loginMember.addNota(nota);
         NotaManager.addNota(nota);
-        System.out.println("Nota berhasil dibuat!");
+        System.out.println("Nota berhasil dibuat!\n");
     }
 
+    /**
+     * Menampilkan detail setiap nota dari instance loginMember.
+     */
     public void displayNota() {
         for (Nota nota : loginMember.getNotaList()) {
             System.out.println(nota);

@@ -47,6 +47,9 @@ public class EmployeeSystem extends SystemCLI {
         System.out.println("3. Logout");
     }
 
+    /**
+     * Mengerjakan satu service pada setiap nota yang ada di notaList
+     */
     public void nyuci() {
         System.out.printf("Stand back! %s beginning to nyuci!\n", loginMember.getNama());
         for (Nota nota : notaList) {
@@ -55,6 +58,9 @@ public class EmployeeSystem extends SystemCLI {
         System.out.println();
     }
 
+    /**
+     * Menampilkan status setiap nota yang ada di notaList
+     */
     public void displayNota() {
         for (Nota nota : notaList) {
             System.out.println(nota.getNotaStatus());
