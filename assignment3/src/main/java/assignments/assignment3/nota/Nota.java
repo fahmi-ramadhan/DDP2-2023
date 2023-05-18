@@ -17,7 +17,6 @@ public class Nota {
     private String tanggalMasuk;
     private String tanggalSelesai;
     private boolean isDone;
-    private boolean isDoneOnTime;
     static public int totalNota;
 
     /**
@@ -83,9 +82,6 @@ public class Nota {
             if (!services[i].isDone()) {
                 if (i == services.length - 1) {
                     this.isDone = true;
-                    if (this.sisaHariPengerjaan >= 0) {
-                        this.isDoneOnTime = true;
-                    }
                 };
                 return String.format("Nota %d : ", this.id) + services[i].doWork();
             }
@@ -94,10 +90,13 @@ public class Nota {
     }
 
     /**
-     * Method untuk pergi ke hari selanjutnya (mengurangi sisa hari pengerjaan).
+     * Method untuk pergi ke hari selanjutnya.
+     * Mengurangi sisa hari pengerjaan jika nota belum selesai dikerjakan.
      */
     public void toNextDay() {
-        this.sisaHariPengerjaan--;
+        if (!isDone) {
+            this.sisaHariPengerjaan--;
+        }
     }
 
     /**
@@ -111,7 +110,7 @@ public class Nota {
         for (LaundryService service : services) {
             harga += service.getHarga(this.berat);
         }
-        if (this.sisaHariPengerjaan < 0 && !isDoneOnTime) {
+        if (this.sisaHariPengerjaan < 0) {
             harga += this.sisaHariPengerjaan * 2000;
         }
         if (harga < 0) harga = 0;
@@ -149,7 +148,7 @@ public class Nota {
             detailNota += String.format("-%s @ Rp.%d\n", service.getServiceName(), service.getHarga(berat));
         }
         detailNota += String.format("Harga Akhir: %d", this.calculateHarga());
-        if (sisaHariPengerjaan < 0 && !isDoneOnTime) {
+        if (sisaHariPengerjaan < 0) {
             detailNota += String.format(" Ada kompensasi keterlambatan %d * %d hari", -sisaHariPengerjaan, 2000);
         }
         return detailNota + "\n";
