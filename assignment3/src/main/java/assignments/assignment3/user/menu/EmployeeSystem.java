@@ -47,6 +47,17 @@ public class EmployeeSystem extends SystemCLI {
         System.out.println("3. Logout");
     }
 
+    public void addEmployee(Employee[] employees) {
+        Employee[] newEmployeeList = new Employee[employeeList.length + employees.length];
+        for (int i = 0; i < employeeList.length; i++) {
+            newEmployeeList[i] = employeeList[i];
+        }
+        for (int i = 0; i < employees.length; i++) {   
+            newEmployeeList[employeeList.length + i] = employees[i];
+        }
+        employeeList = newEmployeeList; 
+    }
+
     /**
      * Mengerjakan satu service pada setiap nota yang ada di notaList
      */
