@@ -1,11 +1,13 @@
 package assignments.assignment3.user.menu;
 
+import assignments.assignment3.user.Employee;
 import assignments.assignment3.user.Member;
 
 import java.util.Scanner;
 
 public abstract class SystemCLI {
     protected Member[] memberList = new Member[0];
+    protected Employee[] employeeList = new Employee[0];
     protected Member loginMember;
     protected Scanner in;
 
