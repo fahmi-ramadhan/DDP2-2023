@@ -117,7 +117,7 @@ public class RegisterGUI extends JPanel {
     private void handleRegister() {
         // Assign variabel-variabel info member dari input user
         String nama = nameTextField.getText().trim();
-        String noHp = phoneTextField.getText().trim();
+        String noHp = phoneTextField.getText();
         String password = new String(passwordField.getPassword());
         Member registeredMember = loginManager.register(nama, noHp, password);
 
