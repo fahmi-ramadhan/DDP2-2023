@@ -4,6 +4,7 @@ import assignments.assignment3.nota.Nota;
 import assignments.assignment3.nota.NotaManager;
 
 import assignments.assignment3.user.menu.SystemCLI;
+import assignments.assignment4.MainFrame;
 import assignments.assignment4.gui.member.AbstractMemberGUI;
 
 import javax.swing.*;
@@ -15,7 +16,6 @@ public class EmployeeSystemGUI extends AbstractMemberGUI {
     public EmployeeSystemGUI(SystemCLI systemCLI) {
         super(systemCLI);
     }
-
 
     @Override
     public String getPageName(){
@@ -30,8 +30,9 @@ public class EmployeeSystemGUI extends AbstractMemberGUI {
      * */
     @Override
     protected JButton[] createButtons() {
-        // TODO
         return new JButton[]{
+                MainFrame.createStyledButton("It's nyuci time", MainFrame.darkBlue),
+                MainFrame.createStyledButton("Display List Nota", MainFrame.darkBlue)
         };
     }
 
@@ -50,18 +51,43 @@ public class EmployeeSystemGUI extends AbstractMemberGUI {
     }
 
     /**
-     * Menampilkan semua Nota yang ada pada sistem.
+     * Menampilkan dan melakukan action mencuci.
      * Akan dipanggil jika pengguna menekan button pertama pada createButtons
      * */
-    private void displayNota() {
-        // TODO
+    private void cuci() {
+        String notaString = "";
+
+        JOptionPane.showMessageDialog(this, String.format("Stand back! %s beginning to nyuci!", loggedInMember.getNama()),
+        "Nyuci Time", JOptionPane.INFORMATION_MESSAGE);
+
+        for (Nota nota : NotaManager.notaList) {
+            notaString += nota.kerjakan() + "\n";
+        }
+
+        if (notaString.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Nothing to Cuci here", "Nyuci Results", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        JOptionPane.showMessageDialog(this, notaString, "Nyuci Results", JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**
-     * Menampilkan dan melakukan action mencuci.
+     * Menampilkan semua Nota yang ada pada sistem.
      * Akan dipanggil jika pengguna menekan button kedua pada createButtons
      * */
-    private void cuci() {
-        // TODO
+    private void displayNota() {
+        String notaString = "";
+
+        for (Nota nota : NotaManager.notaList) {
+            notaString += nota.getNotaStatus() + "\n";
+        }
+
+        if (notaString.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Belum ada nota", "List Nota", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        JOptionPane.showMessageDialog(this, notaString, "List Nota", JOptionPane.INFORMATION_MESSAGE);
     }
 }

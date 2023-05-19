@@ -34,8 +34,9 @@ public class MemberSystemGUI extends AbstractMemberGUI {
      * */
     @Override
     protected JButton[] createButtons() {
-        // TODO
         return new JButton[]{
+                MainFrame.createStyledButton("Saya ingin laundry", MainFrame.darkBlue),
+                MainFrame.createStyledButton("Lihat detail nota saya", MainFrame.darkBlue)
         };
     }
 
@@ -58,7 +59,26 @@ public class MemberSystemGUI extends AbstractMemberGUI {
      * Akan dipanggil jika pengguna menekan button pertama pada createButtons
      * */
     private void showDetailNota() {
-        // TODO
+        String detailNota = "";
+
+        for (Nota nota : loggedInMember.getNotaList()) {
+            detailNota += nota + "\n\n";
+        }
+
+        if (detailNota.isEmpty()) {
+            detailNota += "Belum pernah laundry di CuciCuci, hiks :'(";
+        }
+
+        JTextArea detailNotaArea = new JTextArea(detailNota);
+        detailNotaArea.setBackground(MainFrame.lightBlue);
+        detailNotaArea.setForeground(MainFrame.darkBlue);
+        detailNotaArea.setFont(new Font("Arial", Font.BOLD, 12));
+        detailNotaArea.setEditable(false);
+
+        JScrollPane detailNotaPane = new JScrollPane(detailNotaArea);
+        detailNotaPane.setPreferredSize(new Dimension(400, 300));
+
+        JOptionPane.showMessageDialog(this, detailNotaPane, "Detail Nota", JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**
@@ -66,7 +86,6 @@ public class MemberSystemGUI extends AbstractMemberGUI {
      * Akan dipanggil jika pengguna menekan button kedua pada createButtons
      * */
     private void createNota() {
-        // TODO
+        MainFrame.getInstance().navigateTo("CREATE_NOTA");
     }
-
 }
